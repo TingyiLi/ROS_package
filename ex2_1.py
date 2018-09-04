@@ -1,28 +1,13 @@
 """
-Created on Wed Sep 5 00:00:29 2018
+Created on Wed Sep 5 23:11:29 2018
 
 @author: litingyi
 """
 import numpy as np
 import matplotlib.pyplot as plt
-#from threading import Thread
 from matplotlib.widgets import Button
 from matplotlib.widgets import Slider
 
-"""
-class Hfunct:
-    @staticmethod
-    def plot(self):
-        for i in range(0, 100):
-            print(self.hfunction(x))
-
-    @staticmethod
-    def hfunction(t):
-        return 3 * math.pi * math.exp(-5 * math.sin(2*math.pi*1*t))
-
-a = Hfunct()
-print(a.plot(a))
-"""
 class ButtonHandler:
     def __init__(self):
         self.flag = True
@@ -30,26 +15,27 @@ class ButtonHandler:
         plt.close()
         fig = plt.figure()
         self.ax = fig.add_subplot(1, 1, 1)
+        plt.subplots_adjust(left=0.25, bottom=0.25)
         plt.grid(True)
         plt.ion()
         print('Simulation')
 
-        axprev = plt.axes([0.81, 0.05, 0.1, 0.075])
+        axprev = plt.axes([0.61, 0.01, 0.1, 0.075])
         self.bprev = Button(axprev, 'Stop')
         self.bprev.on_clicked(self.Stop)
-        axnext = plt.axes([0.7, 0.05, 0.1, 0.075])
+        axnext = plt.axes([0.7, 0.01, 0.1, 0.075])
         self.bnext = Button(axnext, 'Start')
         self.bnext.on_clicked(self.Start)
+        axreset = plt.axes([0.79, 0.01, 0.1, 0.075])
+        self.reset = Button(axreset, 'Reset')
+        self.reset.on_clicked(self.Reset)
 
-        a0 = 5
-        f0 = 3
-        delta_f = 5.0
         axcolor = 'lightgoldenrodyellow'
         axfreq = plt.axes([0.25, 0.1, 0.65, 0.03], facecolor=axcolor)
         axamp = plt.axes([0.25, 0.15, 0.65, 0.03], facecolor=axcolor)
 
-        self.sfreq = Slider(axfreq, 'Freq', 0.1, 30.0, valinit=f0)
-        self.samp = Slider(axamp, 'Amp', 0.1, 10.0, valinit=a0)
+        self.sfreq = Slider(axfreq, 'Freq', 0.1, 30.0, valinit=3)
+        self.samp = Slider(axamp, 'Amp', 0.1, 10.0, valinit=5)
 
 
     def threadStart(self):
@@ -71,6 +57,10 @@ class ButtonHandler:
 
     def Stop(self, event):
         self.flag= False
+
+    def Reset(self, event):
+        plt.pause(0.1)
+        self.__init__()
 
 callback = ButtonHandler()
 callback.threadStart()
